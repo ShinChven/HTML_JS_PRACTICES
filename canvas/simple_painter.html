@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #myCanvas {
+            border: 1px solid black;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var mCanvas = document.querySelector("#myCanvas");
+            var mCtx = mCanvas.getContext("2d");
+             mCtx.lineWidth=1;
+            var mColorPicker = document.querySelector("#mColor");
+            mCanvas.onmousedown = function (ev) {
+                var ev = ev || window.event;
+                mCtx.beginPath();
+                mCtx.moveTo(ev.clientX - mCanvas.offsetLeft, ev.clientY - mCanvas.offsetTop);
+                document.onmousemove = function (ev) {
+                    var ev = ev || window.event;
+                    mCtx.strokeStyle=mColorPicker.value;
+                    mCtx.lineTo(ev.clientX - mCanvas.offsetLeft, ev.clientY - mCanvas.offsetTop);
+                    mCtx.stroke();
+                }
+                document.onmouseup= function () {
+                    document.onmousemove=null;
+                    document.onmouseup=null;
+                }
+
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="500px" height="500px"></canvas>
+<br>
+<input type="color" id="mColor">
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Clock Orange</title>
+    <style>
+        #myCanvas {
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: auto;;
+            float: left;
+            background: transparent;;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var mCanvas = document.querySelector("#myCanvas");
+            mCanvas.height = window.innerHeight - 20;
+            mCanvas.width = window.innerWidth - 20;
+            var mCtx = mCanvas.getContext("2d");
+            var turn = 0;
+
+            var xPoint = mCanvas.width / 2
+            var yPoint = mCanvas.height / 2;
+            var size = 150;
+
+            setInterval(function () {
+                if (xPoint > mCanvas.width / 2) {
+                    turn += 0.5;
+                } else {
+                    turn -= 0.5;
+                }
+
+                mCtx.fillStyle = 'blue';
+                mCtx.save();
+                mCtx.translate(xPoint, yPoint);
+                mCtx.clearRect(-xPoint, -yPoint, mCanvas.width, mCanvas.height);
+                mCtx.rotate(turn * Math.PI / 180);
+                mCtx.translate(-size / 2, -size / 2);
+                mCtx.fillRect(0, 0, size, size);
+                mCtx.restore();
+                //console.log(xPoint+"--"+yPoint);
+            }, 1);
+
+            mCanvas.addEventListener("scroll", function (ev) {
+                size++;
+                console.log(size);
+            });
+
+            mCanvas.onmousedown = function (ev) {
+                var ev = ev || window.event;
+                xPoint = ev.clientX - mCanvas.offsetLeft;
+                yPoint = ev.clientY - mCanvas.offsetTop;
+
+                //console.log(xPoint+" "+yPoint);
+                document.onmousemove = function (ev) {
+                    var ev = ev || window.event;
+                    xPoint = ev.clientX - mCanvas.offsetLeft;
+                    yPoint = ev.clientY - mCanvas.offsetTop;
+                }
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                }
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="1000" height="600"></canvas>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Clock Orange</title>
+    <style>
+        #myCanvas {
+            border: 1px solid black;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var r = 200;
+            var x = 250;
+            var y = 250;
+            var mCanvas = document.querySelector("#myCanvas");
+            var mCtx = mCanvas.getContext("2d");
+            var ratio = Math.PI / 180;
+
+            drawClock();
+
+            function drawClock() {
+                // draw minutes
+                for (var i = 0; i < 60; i++) {
+                    mCtx.beginPath();
+                    mCtx.moveTo(x, y);
+                    mCtx.arc(x, y, r, 6 * i * ratio, 6 * (i + 1) * ratio, false);
+                    mCtx.stroke();
+                    mCtx.closePath();
+                }
+
+                // draw blank
+                function drawBlank() {
+                    mCtx.beginPath();
+                    mCtx.moveTo(x, y);
+                    mCtx.fillStyle = "white";
+                    mCtx.arc(x, y, r - 10, 0, 360, false);
+                    mCtx.fill();
+                    mCtx.closePath();
+                }
+
+                drawBlank();
+
+                // draw hours
+                for (var i = 0; i < 12; i++) {
+                    mCtx.beginPath();
+                    mCtx.moveTo(x, y);
+                    mCtx.lineWidth = 5;
+                    mCtx.arc(x, y, r, 30 * i * ratio, 30 * (i + 1) * ratio, false);
+                    mCtx.stroke();
+                    mCtx.closePath();
+                }
+
+                drawBlank();
+
+                var mDate = new Date();
+                var mHour = mDate.getHours();
+                var mMinute = mDate.getMinutes();
+                var mSecond = mDate.getSeconds();
+
+                var minuteRatio = (-90 + mMinute * 6) * ratio;
+                var secondRatio = (-90 + mSecond * 6) * ratio;
+                var hourRatio = ratio * (-90 + mHour * 30 + minuteRatio);
+
+                function drawPoint(lineWidth,radious,ratio) {
+                    mCtx.beginPath();
+                    mCtx.moveTo(x, y);
+                    mCtx.lineWidth = lineWidth;
+                    mCtx.arc(x, y, radious, ratio, ratio, false);
+                    mCtx.stroke();
+                    mCtx.closePath();
+                }
+                // draw hour line
+                drawPoint(5,r - 130,hourRatio);
+                // draw minute line
+                drawPoint(5,r - 50,minuteRatio);
+                // draw second line
+                drawPoint(1,r - 10,secondRatio);
+            }
+            setInterval(drawClock, 1000);
+        }
+
+
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="500px" height="500px"></canvas>
+<br>
+<input type="color" id="mColor">
+
+
+</body>
+</html>
